@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "agenda-ui-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/agendaUi/AgendaUiWebPart.js",
+          "manifest": "./src/webparts/agendaUi/AgendaUiWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AgendaUiWebPartStrings": "lib/webparts/agendaUi/loc/{locale}.js"
+  }
+}
