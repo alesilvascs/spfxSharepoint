@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -16,7 +15,6 @@ import AddIcon from "@material-ui/icons/Add";
 import {useEffect, useState} from "react";
 import {sp} from "@pnp/sp";
 import {IAgendaUiProps} from "../components/IAgendaUiProps";
-import {IItemAddResult} from "@pnp/sp/items";
 import * as React from 'react';
 
 
@@ -47,6 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function FormAgenda(props: IAgendaUiProps) {
 
 
+
     const [open, setOpen] =  useState(false);
     const handleClickOpen = () => {
         setOpen(true);
@@ -65,7 +64,7 @@ export default function FormAgenda(props: IAgendaUiProps) {
         setAge(event.target.value as string);
     };
 
-    const [res, setRes] = useState([])
+    // const [res, setRes] = useState([])
     const [dados, setData] = useState({});
 
     useEffect(() => {
@@ -84,11 +83,20 @@ export default function FormAgenda(props: IAgendaUiProps) {
 
 
      const SalvarReserva = async ()  => {
+         let cor:string
+         if(cabana == "Cabana Rústica"){
+             cor="blue"
+         }else if(cabana == "Cabana do Tênis"){
+             cor="green"
+         }else if(cabana == "Choupana"){
+             cor="purple"
+         }
          await sp.web.lists.getByTitle("Reservas").items.add({
                  Title: props.userDisplayName,
                  Cabana: cabana,
+                 color: cor,
                  DataInicial: datainicial,
-                 DataFinal: datafinal,
+                 DataFinal: datafinal
              }
     )}
 
@@ -100,12 +108,11 @@ export default function FormAgenda(props: IAgendaUiProps) {
 
         setData(vari);
         SalvarReserva();
-        console.log(SalvarReserva)
-
-       console.log(props.userDisplayName)
         handleClose();
     }
+    let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
+    console.log(todayStr+ " 08:00")
     // @ts-ignore
     return (
         <div>
@@ -125,16 +132,16 @@ export default function FormAgenda(props: IAgendaUiProps) {
                                 labelId="demo-simple-select-label"
                                 id="cabana"
                                 value={cabana}
-                                onChange={handleChange}>Boa tarde aNDRESSA
-                                <MenuItem value={'10'}>Cabana Rústica</MenuItem>
-                                <MenuItem value={'20'}>Cabana do Tênis</MenuItem>
-                                <MenuItem value={'30'}>Choupana</MenuItem>
+                                onChange={handleChange}>
+                                <MenuItem value={'Cabana Rústica'}>Cabana Rústica</MenuItem>
+                                <MenuItem value={'Cabana do Tênis'}>Cabana do Tênis</MenuItem>
+                                <MenuItem value={'Choupana'}>Choupana</MenuItem>
                             </Select>
                             <TextField
                                 id="datainicial"
                                 label="Data Inicial"
                                 type="datetime-local"
-                                defaultValue="2022-09-24 08:00"
+                                defaultValue= "2023-02-24 08:00"
                                 onChange={e => setDatainicial(e.target.value)}
                                 className={classes.textField}
                                 InputLabelProps={{
@@ -145,7 +152,7 @@ export default function FormAgenda(props: IAgendaUiProps) {
                                 id="datafinal"
                                 label="Data Final"
                                 type="datetime-local"
-                                defaultValue="2022-09-24 18:00"
+                                defaultValue="2023-02-24 18:00"
                                 onChange={e => setDatafinal(e.target.value)}
                                 className={classes.textField}
                                 InputLabelProps={{

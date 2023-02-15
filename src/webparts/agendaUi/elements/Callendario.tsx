@@ -3,62 +3,28 @@ import FullCalendar, {DateSelectArg, EventApi, EventClickArg, EventContentArg, f
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
-import {createEventId, INITIAL_EVENTS} from "../components/event-utils";
-import {SPHttpClient, SPHttpClientResponse} from "@microsoft/sp-http";
-import {useEffect, useState} from "react";
-import FormAgenda from "./FormAgenda";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import {sp} from "@pnp/sp";
+import {IAgendaUiProps} from "../components/IAgendaUiProps";
+
 
 interface DemoAppState {
     weekendsVisible: boolean
     currentEvents: EventApi[]
 }
-// const useStyles = makeStyles((theme: Theme) =>
-//     createStyles({
-//         container: {
-//             display: 'flex',
-//             flexWrap: 'wrap',
-//             width: 500,
-//         },
-//         textField: {
-//             marginLeft: theme.spacing(1),
-//             marginRight: theme.spacing(1),
-//             width: 200,
-//         },
-//         formControl: {
-//             margin: theme.spacing(1),
-//             minWidth: 500,
-//         },
-//         selectEmpty: {
-//             marginTop: theme.spacing(2),
-//         },
-//
-//     }),
-//
-// );
-
 
 export default class Callendario extends  React.Component<{}, DemoAppState> {
+
+    constructor(props:IAgendaUiProps ,ress:any) {
+        super(props,ress);
+
+    }
+
+
     state: DemoAppState = {
         weekendsVisible: true,
         currentEvents: []
     }
 
     render() {
-
 
         return (
             <div className='demo-app'>
@@ -72,13 +38,14 @@ export default class Callendario extends  React.Component<{}, DemoAppState> {
                             center: 'title',
                             right: 'dayGridMonth,timeGridWeek,timeGridDay'
                         }}
+
                         initialView='dayGridMonth'
                         editable={true}
                         selectable={true}
                         selectMirror={true}
                         dayMaxEvents={true}
                         weekends={this.state.weekendsVisible}
-                        initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+                        initialEvents={ JSON.parse(this.eventos())} // INITIAL_EVENTS alternatively, use the `events` setting to fetch from a feed
                         select={this.handleDateSelect}
                         eventContent={renderEventContent} // custom render function
                         eventClick={this.handleEventClick}
@@ -124,7 +91,18 @@ export default class Callendario extends  React.Component<{}, DemoAppState> {
             </div>
         )
     }
+    eventos = () => {
 
+        const ev:any = [];
+
+        [this.props.children].map((item: any ) => (
+            item.res.map((itens:any ) => (
+                ev.push(  {'title': itens.Cabana,'start': itens.DataInicial.substring(10,-10),'color':itens.color })
+                )
+            )
+    ))
+        return JSON.stringify(ev)
+    }
 
     handleWeekendsToggle = () => {
         this.setState({
@@ -133,15 +111,14 @@ export default class Callendario extends  React.Component<{}, DemoAppState> {
     }
     handleDateSelect = (selectInfo: DateSelectArg) => {
 
-
          let title =  prompt(selectInfo.startStr)
-        let calendarApi = selectInfo.view.calendar
+         let calendarApi = selectInfo.view.calendar
         // let [state,setstate] = useState();
          calendarApi.unselect() // clear date selection
 
         if (title) {
             calendarApi.addEvent({
-                id: createEventId(),
+                // id: createEventId(),
                 title,
                start: selectInfo.startStr,
                end: selectInfo.endStr,

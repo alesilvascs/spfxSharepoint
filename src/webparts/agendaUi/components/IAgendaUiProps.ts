@@ -9,4 +9,6 @@ export interface IAgendaUiProps {
   cabana?:string,
   userDisplayName: string;
   context?: any;
+  res?:any;
+  ress?:any;
 }

@@ -7,7 +7,7 @@ import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import FullScreenDialog from "../elements/FullScreenDialog";
 import styles from "./AgendaUi.module.scss";
-import {IItemAddResult} from "@pnp/sp/items";
+
 
 
 
@@ -45,37 +45,27 @@ export default function AgendaUiTESTWE(props: IAgendaUiProps) {
             });
     }
 
-    // const SalvarReserva  = async () => {
-    //     await sp.web.lists.getByTitle("Reservas").items.add({
-    //
-    //         Title: props.userDisplayName,
-    //         Cabana:"20",
-    //         DataFinal:"2022-09-24T23:00",
-    //         DataInicial:"2022-09-24T10:00"
-    //     });
-    // }
-    // console.log(SalvarReserva);
     return (
                 <section className={`${styles.agendaUi} `}>
                     <div className={styles.welcome}>
                         {/*<h2>Olá, { props.userDisplayName   }!</h2>*/}
                          <div>
-                            <FullScreenDialog userDisplayName={props.userDisplayName}/>
+                            <FullScreenDialog res={res} userDisplayName={props.userDisplayName}/>
                          </div>
                     </div>
 
-                    {console.log(res)}
+                    {/*{console.log(res)}*/}
 
-            { res.map((item, i) =>
-                <div>
-                    <li key={i}>
-                         <span>{item.Title} / </span>
-                         <span>{item.DataInicial} /   </span>
-                         <span>{item.DataFinal}  </span>
-                       </li>
-                 </div>
-                )
-             }
+            {/*{ res.map((item, i) =>*/}
+            {/*    <div>*/}
+            {/*        <li key={i}>*/}
+            {/*             <span>{item.Title} / </span>*/}
+            {/*             <span>{item.DataInicial} /   </span>*/}
+            {/*             <span>{item.DataFinal}  </span>*/}
+            {/*           </li>*/}
+            {/*     </div>*/}
+            {/*    )*/}
+            {/* }*/}
 
 
 </section>
